@@ -63,4 +63,19 @@
 );
  -> this is how addtoset can add multiple values at a time using $each
 
-41. 
+41. db.test.updateOne(
+  { _id: ObjectId('6406ad63fc13ae5a40000065') },
+  {
+    $push: {
+      languages: { $each: ['hindi', 'english'] }
+    }
+  }
+); -> $push doesnt care if the value is duplicate or not. it will add the value to the array property. also, it can add multiple values at a time using $each or single value like : $push: {languages: 'hindi'}
+
+42. db.collectionname.updateOne({_id: ObjectId: '....'}, {$unset: {name: ''}}) -> jodi unset use kore name property ta remove kora jay
+43. db.collectionname.updateOne({_id: ObjectId: '....'}, {$rename: {name: 'fullname'}}) -> jodi rename use kore name property ta rename kora jay
+44. db.collectionname.updateOne({_id: ObjectId: '....'}, {$inc: {age: 2}}) -> jodi inc use kore age property er value ta 2 kore barano jay
+45. db.collectionname.updateOne({_id: ObjectId: '....'}, {$mul: {age: 2}}) -> jodi mul use kore age property er value ta 2 kore gun kora jay
+46. db.collectionname.updateOne({_id: ObjectId: '....'}, {$pop: languages: 1 }) -> languages array er last element ta remove hoye jabe. ar -1 dile first element ta remove hoye jabe
+
+47. 
