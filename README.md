@@ -32,3 +32,35 @@
 21. db.users.updateOne({\_id: Ob......}, {$set: {name: "......."}}) -> update a document
 22. db.users.updateMany({age: {$lt: 18}}, {$set: {age: 18}}) -> 18 bochorer nicher shobar age 18 baniye dibe
 23. db.users.updateMany({age: {$lt: 18}}, {$inc: {age: 2}}) -> 18 bochorer nicher shobar age er sathe 2 kore jog kore dibe
+24. db.collectionname.insertOne({name: "....", age: 23, skills: ["JavaScript", "Python"]}) -> insert a document
+25. db.collectionname.insertMany([{name: "....", age: 23, skills: ["JavaScript", "Python"]}, {name: "....", age: 23, skills: ["JavaScript", "Python"]}]) -> insert many documents
+26. db.collectionname.findOne({name: "...."}) -> first document with the name
+27. db.collectionname.find({gender: "Male"}).project({name: 1, email: 1}) -> only male peoples name and email will be sent
+28. db.collectionname.findOne({gender: 'Male}, {name: 1}) ->the first male person's name will be sent, this is called field projection or filtering
+29. db.collectionname.find({age: {$gt: 18}}).sort({age: -1}) -> all the people whose age is greater than 18 will be sent, and they will be sorted in descending order
+
+30. db.collectionname.find({$and: [{age: {$gt: 18}}, {age: {$lt: 30}}]}) -> all the people whose age is greater than 18 and less than 30 will be sent
+31. db.collectionname.find({$or: [{interests: 'travelling'}, {interests: 'cooking'}]}) -> all the people who is interested in travelling or cooking, will be sent
+
+32. db.collectionname.find({age: {$exists: true}}) -> all the people who has age property, will be sent
+33. db.collectionname.find({age: {$type: 'number'}}) -> all the people who has age property, and the type of age property is number, will be sent
+34. db.collectionname.find({age: {$mod: [5, 0]}}) -> all the people who has age property, and the age is divisible by 5, will be sent
+35. db.collectionname.find({friends: {$size: 2}}) -> all the people who has friends property, and the length of friends array is 2, will be sent
+36. db.collectionname.find({interests: {$all: ['travelling', 'cooking']}}) -> all the people who has interests property, and the interests array has travelling and cooking both, will be sent. if we dont use $all, mongodb will send those people who has interest in travelling , cooking in a serial order. but if we use $all, then mongodb will send those people who has interest in travelling and cooking both, no matter in which order they are in the interests array
+
+37. db.collectionname.find({person: {$elemMatch: {name: 'John', age: 23}}}) -> kono array of object ba array theke more flexibilly data ana jay. ekhane person array er moddhe jodi name John ebong age 23 thake, tahole oi array ta return korbe
+
+38. db.collectionname.updateOne({_id: ObjectId: '....'}, {$set: {name: '....'}}) -> updates a documents any non array property
+39. db.collectionname.updateOne({_id: ObjectId: '....'}, {$addToSet: friends: 'abul'}) -> updates a documents friends property. difference between set and addToSet is that, set can add duplicate value, but addToSet can not add duplicate value. also, addToSet can add multiple values at a time. also, addToSet can add a value to an array property keeping all the previous ones untouched, but set can add value only to a non array property.
+
+40. db.test.updateOne(
+  { _id: ObjectId('6406ad63fc13ae5a40000065') },
+  {
+    $addToSet: {
+      languages: { $each: ['hindi', 'english'] }
+    }
+  }
+);
+ -> this is how addtoset can add multiple values at a time using $each
+
+41. 
