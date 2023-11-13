@@ -78,4 +78,56 @@
 45. db.collectionname.updateOne({_id: ObjectId: '....'}, {$mul: {age: 2}}) -> jodi mul use kore age property er value ta 2 kore gun kora jay
 46. db.collectionname.updateOne({_id: ObjectId: '....'}, {$pop: languages: 1 }) -> languages array er last element ta remove hoye jabe. ar -1 dile first element ta remove hoye jabe
 
-47. 
+## aggregation 
+
+-> first stage e match, second stage e project, third stage e group, fourth stage e sort, fifth stage e limit, sixth stage e skip kore data ante hoy aggregation er maddhome. tobe eta oicchik. jekono stage dorkar na hole use na korleo cholbe. tobe mathay rakhte hobe je, first stage je data gulo par korbe, shei data gulo second stage e jabe, second stage je data gulo par korbe, shei data gulo third stage e jabe, and so on. tai ultapalta korle data gulo pawa jabe na.
+
+1. db.test.aggregate([
+  //stage 1 - match
+  {$match: {email: 'babulakterfsd@gmail.com', age: {$lt: 25}}},
+  //stage 2 - project
+  {$project: {_id: 0, email: 1, age: 1, gender: 1}},
+
+]) -> ekhane prothome email diye match kore age 25 er nicher data gula neya hoyeche, tarpor oi datagulor just email, age ar gender pathano hoyeche.
+
+2. db.test.aggregate([
+  {$match: {email: 'babulakterfsd@gmail.com', age: {$lt: 25}}},
+  {$addFields: {course: 'Next level web development'}},
+  {$project: {_id: 0, email: 1, age: 1, gender: 1, course: 1}}
+]) -> addFields er maddhome notun field add kora hoy, kintu eta shorashori existing document e ashole add hoy na. kintu amar jodi notun ekta collection dorkar hoy jekhane existing property er sathe addFields er property gula soho notun document diye collection toiri hobe, tokhn nicher moto kore $out use kore kora jabe :
+
+  db.test.aggregate([
+  {$match: {email: 'babulakterfsd@gmail.com', age: {$lt: 25}}},
+  {$addFields: {course: 'Next level web development'}},
+  {$project: {_id: 0, email: 1, age: 1, gender: 1, course: 1}},
+  {$out: 'newCollection'}
+]) -> kintu oi je kheyal rakhte hobe, ami notun collection toiri korar aage project korchi, tai notun collection e sudhu oi property gulo niyei document gulo thakbe
+
+3. kintu jodi chai existing collection ei document gulate notun field add korbo, tahole $merge use korte hobe evabe:
+    db.test.aggregate([
+  {$match: {gender: 'Male'}},
+  {$addFields: {course: 'Next level web development'}},
+  {$merge: 'test'}
+]) -> $merge er value je collection dibo, sei collection e add hobe
+
+4. group kore kono nirdishto field onujayee koto gula document ache set ber kora jay evabe :
+   db.test.aggregate([
+  {$group: {_id: "$gender", count: {"$sum" : 1}}}
+]) -> amake dekhabe kon gender er koto jon ache ei collection e
+
+arekta example :
+  db.test.aggregate([
+  {$group: {_id: "$address.country", count: {"$sum" : 1}}}
+]) -> prottekta desher koyjon kore ache tader naam dekhabe. ar jodi desher loker puro details dekhte chai taile evabe korte hobe:
+
+  db.test.aggregate([
+  {$group: {_id: "$address.country", people: {$push: "$$ROOT"}}}
+])
+
+arekta example :
+  db.test.aggregate([
+  {$group: {_id: "$address.country", people: {$push: "$$ROOT"}}},
+  {$prject: {"people.address": 1, "people.email": 1, "people.age": 1}}
+]) -> ekhane project use kore dekhano hoyeche
+
+5. 
