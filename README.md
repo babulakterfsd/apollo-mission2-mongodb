@@ -196,4 +196,24 @@ shob cheye boro group of people ber korlam evabe:
 ]) -> evabe $lookup use kore ek collection er datar sathe referencing kore onno collection er data niye asha jay. eta khub e powerful ebong dorkari.
 
 
-11. 
+11. details dekhar jonno evabe command likhte hoy : db.test.find({email: 'hello@gmail.com'}).explain("executionStats")
+12. boro datar collection gulate taratari query korar jonno indexing kora hoy evabe :
+
+    db.orders.createIndex({email: 1}) -> 1 mane ascending order, -1 mane descending order. ami email diye index korlam. ekhon jodi email diye data khuji, taile _id er motoi druto paoa jabe.
+
+13. db.orders.createIndex({email: 1}, {unique: true}) -> ekhane unique true kore dilam. tai jodi ekta email diye 2 ta order kora hoy, tahole error dekhabe. karon email unique hote hobe.
+
+14. indexing remove korte dropIndex use kora hoy. example :
+
+    db.orders.dropIndex({email: 1})
+
+15. search index kora hoy evabe :
+
+    db.orders.createIndex({email: 'text'})
+
+    tarpor search korar jonno :
+     
+      db.orders.find({$text: {$search: "gmail"}})
+
+      tahole gmail er sathe match kore jei email ache, shei email gulo show korbe
+
