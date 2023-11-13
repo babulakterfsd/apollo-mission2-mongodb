@@ -179,4 +179,10 @@ shob cheye boro group of people ber korlam evabe:
 
 
 
-9. 
+9. faceet er maddhome multi pipeline use kora hoy evabe :
+
+   db.test.aggregate([
+  {$facet: {facet1: [{$match: {age: {$lt: 25}}}, {$project: {_id: 0, name: 1, age: 1}}], facet2: [{$match: {age: {$gte: 25}}}, {$project: {_id: 0, name: 1, age: 1}}]}}
+  ])
+
+10. 
