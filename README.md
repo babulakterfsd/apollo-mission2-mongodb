@@ -185,4 +185,15 @@ shob cheye boro group of people ber korlam evabe:
   {$facet: {facet1: [{$match: {age: {$lt: 25}}}, {$project: {_id: 0, name: 1, age: 1}}], facet2: [{$match: {age: {$gte: 25}}}, {$project: {_id: 0, name: 1, age: 1}}]}}
   ])
 
-10. 
+10. db.orders.aggregate([
+  {
+  $lookup: {
+    from: "test", -> kon collection theke data ante chai
+    localField: "userId", -> ami je collection e achi, shei collection er kon field diye data ante chai
+    foreignField: "_id", -> ami je collection theke data ante chai, shei collection er kon field er sathe match korte chai
+    as: "Who has Ordered" -> je data ta anbo, seti ki naame show korbe
+}}
+]) -> evabe $lookup use kore ek collection er datar sathe referencing kore onno collection er data niye asha jay. eta khub e powerful ebong dorkari.
+
+
+11. 
