@@ -130,4 +130,53 @@ arekta example :
   {$prject: {"people.address": 1, "people.email": 1, "people.age": 1}}
 ]) -> ekhane project use kore dekhano hoyeche
 
-5. 
+5. jodi kono collection er prottekta document miliye kono calculation chalate hoy, tahole id null nile shob ekta document hishebe dhore nibe mongodb. tkhn calculation easy hobe. jemon test collection e thaka 99 joner totalsalary ber korte evabe korte hobe :
+
+   db.test.aggregate([
+  {$group: {_id: null, totalsalary: {$sum: "$salary"}}}
+])
+
+ar jodi max salary ber korte hoy tahole evabe korte hoy:
+  db.test.aggregate([
+  {$group: {_id: null, maxsalary: {$max: "$salary"}}}
+])
+
+6. dhorlam test collection theke amake ber korte hobe ekta nirdishto boyosh group er loker ki ki interest ache. ekhon interests ache amar collection e array hishebe. array er upore to ami action nite partesi na. tai array ta ke vengge individual doc e convert korte hobe first e . ar eikhnei chole ashe $unwind. ei unwind ekta array ke vengge individual doc toiri kore. example :
+
+db.test.aggregate([
+  {$unwind: "$interests"},
+  {$group: {_id: {age: "$age", interests: "$interests"}, count: {$sum: 1}}}
+]) -> ekhane unwind er maddhome interests array ta vengge individual doc toiri hoyeche. ar tarpor group er maddhome amra ber korte chai je, kon age er loker ki ki interest ache. tai age ar interest er upore group kore count ber kora hoyeche
+
+7. db.test.aggregate([
+  {$unwind: "$interests"},
+  {$group: {_id: "$age", interestsPerAge: {$push: "$interests"}}}
+]) -> ekhane unwind er maddhome interests array ta vengge individual doc toiri hoyeche. ar tarpor group er maddhome amra ber korte chai je, kon age er loker ki ki interest ache. tai age ar interest er upore group kore count ber kora hoyeche
+
+8. $bucket use korar maddhome boundary kore kore group kora jay evabe:
+
+   db.test.aggregate([
+  {$bucket: {groupBy: "$age", boundaries: [20, 40, 60], default: '60 bochorer uporer manushjon', output: {count: {$sum: 1}}}}
+  ]) -> ekhane 0 theke 20, 21 theke 40, 41 theke 60, 60 er upore er manushjon er count ber kora hoyeche. chaile push use kore tader full data o pathano jabe evabe:
+    
+    db.test.aggregate([
+  {$bucket: {groupBy: "$age", boundaries: [20, 40, 60], default: '60 bochorer uporer manushjon', output: {count: {$sum: 1, people: {$push: "$$ROOT"}}}}}
+  ])
+
+  abar ekhane amra count er upor vitti kore sort kore dekhbo:
+
+  db.test.aggregate([
+  {$bucket: {groupBy: "$age", boundaries: [20, 40, 60], default: '60 bochorer uporer manushjon', output: {count: {$sum: 1, people: {$push: "$$ROOT"}}}}},
+  {$sort: {count: -1}
+  ])
+
+shob cheye boro group of people ber korlam evabe:
+  db.test.aggregate([
+  {$bucket: {groupBy: "$age", boundaries: [20, 40, 60], default: '60 bochorer uporer manushjon', output: {count: {$sum: 1}}}},
+  {$sort: {count: -1}},
+  {$limit: 1}
+  ])
+
+
+
+9. 
