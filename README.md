@@ -217,3 +217,31 @@ shob cheye boro group of people ber korlam evabe:
 
       tahole gmail er sathe match kore jei email ache, shei email gulo show korbe
 
+
+14. db.test.aggregate([
+  {
+    $lookup: {
+      from: "orders",
+      localField: "_id",
+      foreignField: "userId",
+      as: "orders"
+    }
+  },
+  {
+    $match: {
+      orders: { $ne: [] }
+    }
+  },
+  {
+    $limit: 1
+  }, 
+  {
+  $project: {
+    _id: 0,
+    name: 1,
+    email: 1,
+    salary: 1,
+    orders: 1
+}
+}
+])  -> kon userder order ache seta ber korbe orders collection theke, tarpor jeshob users der kono order nai seta filter out kore dibe, tarpor limit 1 use kore 1 ta user er order dekhabe, tarpor project use kore amra jodi kono field na dekhte chai, tahole 0 diye seta exclude kore dite hobe, ar jodi dekhte chai tahole 1 diye seta include korte hobe.
